@@ -27,14 +27,27 @@ def parse_command(raw_command: str) -> ParsedCommand:
         return ParsedCommand(name="search", args=(command.removeprefix("search:"),))
 
     if command.startswith("form:fill:"):
-        parts = command.split(":", 3)
-        if len(parts) != 4:
+        payload = command.removeprefix("form:fill:")
+        url, separator, fields = payload.rpartition(":")
+        if not separator or not url.strip() or not fields.strip():
             return ParsedCommand(
                 name="invalid",
                 args=("Format attendu: form:fill:<url>:<selecteur>=<valeur>,...",),
             )
-        _, _, url, fields = parts
         return ParsedCommand(name="form_fill", args=(url, fields))
+
+    if command.startswith("form:analyze:"):
+        return ParsedCommand(name="form_analyze", args=(command.removeprefix("form:analyze:"),))
+
+    if command.startswith("form:dryrun:"):
+        payload = command.removeprefix("form:dryrun:")
+        url, separator, fields = payload.rpartition(":")
+        if not separator or not url.strip() or not fields.strip():
+            return ParsedCommand(
+                name="invalid",
+                args=("Format attendu: form:dryrun:<url>:<selecteur>=<valeur>,...",),
+            )
+        return ParsedCommand(name="form_dryrun", args=(url, fields))
 
     if command.startswith("secret:get:"):
         return ParsedCommand(name="secret_get", args=(command.removeprefix("secret:get:"),))
@@ -55,5 +68,11 @@ def parse_command(raw_command: str) -> ParsedCommand:
             return ParsedCommand(name="invalid", args=("Format attendu: file:write:<chemin>:<contenu>",))
         _, _, path, content = parts
         return ParsedCommand(name="file_write", args=(path, content))
+
+    if command == "report:markdown":
+        return ParsedCommand(name="report_markdown", args=())
+
+    if command.startswith("report:write:"):
+        return ParsedCommand(name="report_write", args=(command.removeprefix("report:write:"),))
 
     return ParsedCommand(name="llm", args=(command,))

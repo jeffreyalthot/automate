@@ -16,7 +16,10 @@ Ce projet fournit une base **prête à étendre** pour créer un automate IA loc
 src/
 ├── agent.py
 ├── commands/
+│   ├── form_fields.py
 │   └── parser.py
+├── reporting/
+│   └── session_report.py
 ├── security/
 │   └── path_guard.py
 ├── services/
@@ -29,6 +32,9 @@ Nouveautés:
 - exécution des commandes centralisée dans `services/command_executor.py`;
 - garde-fou de chemin pour les opérations fichiers (`security/path_guard.py`);
 - nouvelle commande `form:fill:<url>:<selecteur>=<valeur>,...`.
+- analyse de formulaires avec `form:analyze:<url>`;
+- prévisualisation des valeurs de formulaires avec `form:dryrun:<url>:...`;
+- rapport de session en Markdown via `report:markdown` / `report:write:<chemin>`.
 
 ## Roadmap (détaillée)
 
