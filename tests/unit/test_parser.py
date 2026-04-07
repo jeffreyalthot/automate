@@ -27,6 +27,18 @@ class ParserWorkspaceCatalogTests(unittest.TestCase):
         self.assertEqual(parsed.args, ("6",))
 
 
+class ParserWorkspaceMapTests(unittest.TestCase):
+    def test_workspace_map_default(self) -> None:
+        parsed = parse_command("workspace:map")
+        self.assertEqual(parsed.name, "workspace_map")
+        self.assertEqual(parsed.args, ("3",))
+
+    def test_workspace_map_custom_depth(self) -> None:
+        parsed = parse_command("workspace:map:4")
+        self.assertEqual(parsed.name, "workspace_map")
+        self.assertEqual(parsed.args, ("4",))
+
+
 class ParserWorkspaceInsightsTests(unittest.TestCase):
     def test_workspace_insights_default(self) -> None:
         parsed = parse_command("workspace:insights")
