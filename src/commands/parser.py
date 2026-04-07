@@ -32,6 +32,12 @@ def parse_command(raw_command: str) -> ParsedCommand:
     if command.startswith("workspace:tree:"):
         return ParsedCommand(name="workspace_tree", args=(command.removeprefix("workspace:tree:"),))
 
+    if command == "workspace:summary":
+        return ParsedCommand(name="workspace_summary", args=("3",))
+
+    if command.startswith("workspace:summary:"):
+        return ParsedCommand(name="workspace_summary", args=(command.removeprefix("workspace:summary:"),))
+
     if command.startswith("form:fill:"):
         payload = command.removeprefix("form:fill:")
         url, separator, fields = payload.rpartition(":")

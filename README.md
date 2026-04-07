@@ -25,7 +25,8 @@ src/
 ├── services/
 │   ├── command_executor.py
 │   └── workspace/
-│       └── inspector.py
+│       ├── inspector.py
+│       └── summary.py
 ├── utils/
 │   └── tree_formatter.py
 ├── toolkit.py
@@ -40,6 +41,7 @@ Nouveautés:
 - prévisualisation des valeurs de formulaires avec `form:dryrun:<url>:...`;
 - rapport de session en Markdown via `report:markdown` / `report:write:<chemin>`.
 - visualisation de l'arborescence locale via `workspace:tree[:profondeur]` (1 à 6).
+- résumé structurel du projet avec `workspace:summary[:profondeur]` (JSON: extensions, tailles, top fichiers).
 
 ## Roadmap (détaillée)
 
@@ -539,5 +541,6 @@ Exemples de commandes dans le CLI :
 - `secret:list` : liste les clés existantes.
 - `file:read:<chemin>` : lit un fichier local.
 - `file:write:<chemin>:<contenu>` : écrit un fichier local.
+- `workspace:summary[:profondeur]` : produit un diagnostic JSON de l'arborescence (volumétrie et extensions).
 
 Le parsing des commandes est maintenant isolé dans `src/commands/parser.py`, ce qui facilite l'ajout de nouvelles commandes.
