@@ -15,7 +15,7 @@ class WorkspaceMap:
     root: Path
 
     def build(self, depth: int = 3, max_entries: int = 2000) -> ToolResult:
-        safe_depth = max(1, min(depth, 8))
+        safe_depth = max(1, min(depth, 12))
         safe_max_entries = max(200, min(max_entries, 5000))
 
         scanned_entries = 0

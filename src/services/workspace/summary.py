@@ -14,7 +14,7 @@ class WorkspaceSummary:
 
     def build(self, depth: int = 3, max_entries: int = 500) -> ToolResult:
         """Construit un résumé JSON de l'espace de travail."""
-        safe_depth = max(1, min(depth, 8))
+        safe_depth = max(1, min(depth, 12))
         safe_max_entries = max(50, min(max_entries, 2000))
 
         counters = Counter()

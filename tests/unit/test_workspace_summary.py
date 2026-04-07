@@ -22,6 +22,17 @@ class WorkspaceSummaryTests(unittest.TestCase):
             self.assertGreaterEqual(payload["directories"], 1)
             self.assertTrue(any(item["extension"] == ".py" for item in payload["top_extensions"]))
 
+    def test_workspace_summary_depth_is_capped_to_12(self) -> None:
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "a.py").write_text("print('ok')", encoding="utf-8")
+
+            summary = WorkspaceSummary(root).build(depth=99)
+
+            self.assertTrue(summary.ok)
+            payload = json.loads(summary.output)
+            self.assertEqual(payload["depth"], 12)
+
 
 if __name__ == "__main__":
     unittest.main()
