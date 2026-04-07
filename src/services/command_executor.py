@@ -14,6 +14,7 @@ HELP_TEXT = """Commandes disponibles:
 - help
 - web:<url>
 - search:<requête>
+- workspace:tree[:profondeur]
 - form:fill:<url>:<selecteur>=<valeur>,<selecteur>=<valeur>
 - form:analyze:<url>
 - form:dryrun:<url>:<selecteur>=<valeur>,<selecteur>=<valeur>
@@ -63,6 +64,18 @@ class CommandExecutor:
 
         if parsed.name == "search":
             result = self.toolkit.web_search(parsed.args[0])
+            self._track(parsed, result.output, success=result.ok)
+            return result.output
+
+        if parsed.name == "workspace_tree":
+            raw_depth = parsed.args[0]
+            try:
+                depth = int(raw_depth)
+            except ValueError:
+                response = "Profondeur invalide. Utilisez un entier entre 1 et 6."
+                self._track(parsed, response, success=False)
+                return response
+            result = self.toolkit.workspace_tree(depth=depth)
             self._track(parsed, result.output, success=result.ok)
             return result.output
 
