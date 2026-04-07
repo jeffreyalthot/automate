@@ -63,6 +63,31 @@ class Toolkit:
         except Exception as exc:
             return ToolResult(False, f"Erreur formulaire: {exc}")
 
+    def analyze_form(self, url: str, timeout: int = 20) -> ToolResult:
+        try:
+            r = requests.get(url, timeout=timeout)
+            r.raise_for_status()
+            soup = BeautifulSoup(r.text, "html.parser")
+            descriptors: list[dict[str, str]] = []
+            for field in soup.select("input,select,textarea"):
+                tag_name = field.name or "input"
+                field_type = field.get("type", "text")
+                selector = field.get("id")
+                if selector:
+                    selector = f"#{selector}"
+                elif field.get("name"):
+                    selector = f"{tag_name}[name='{field.get('name')}']"
+                else:
+                    continue
+                descriptors.append({"selector": selector, "tag": tag_name, "type": field_type})
+
+            if not descriptors:
+                return ToolResult(True, "Aucun champ détecté.")
+
+            return ToolResult(True, json.dumps(descriptors[:30], ensure_ascii=False, indent=2))
+        except Exception as exc:
+            return ToolResult(False, f"Erreur analyse formulaire: {exc}")
+
     def write_file(self, path: str, content: str) -> ToolResult:
         try:
             target = self.path_guard.resolve(path)
