@@ -10,7 +10,7 @@ Ce projet fournit une base **prête à étendre** pour créer un automate IA loc
 
 ---
 
-## Roadmap
+## Roadmap (détaillée)
 
 ### Phase 0 — Documentation & cadrage (ce README)
 - [x] Définir les objectifs fonctionnels et non fonctionnels.
@@ -42,6 +42,41 @@ Ce projet fournit une base **prête à étendre** pour créer un automate IA loc
 - [ ] Journalisation audit des accès secrets.
 - [ ] Politique d’autorisation explicite par outil/action.
 - [ ] Tests d’intégration + CI.
+
+### Phase 6 — Navigation web autonome (à faire)
+- [ ] Ajouter un moteur de navigation guidée par objectif (plan → action → vérification).
+- [ ] Gérer les sessions persistantes (cookies chiffrés, profil navigateur isolé).
+- [ ] Implémenter limites anti-abus : timeout, max étapes, allowlist de domaines.
+- [ ] Ajouter extraction structurée (tables, liens, métadonnées) en plus du texte brut.
+
+### Phase 7 — Automatisation de formulaires avancée (à faire)
+- [ ] Détecter automatiquement les champs (`input`, `select`, `textarea`) et leur type.
+- [ ] Implémenter une stratégie “dry-run” (prévisualiser les valeurs avant soumission).
+- [ ] Ajouter modes de soumission : manuel confirmé / automatique conditionnel.
+- [ ] Capturer preuve d’exécution (capture écran + log horodaté).
+
+### Phase 8 — Mémoire utile & gouvernance des données (à faire)
+- [ ] Classifier les données stockées : secret / personnel / temporaire / public.
+- [ ] Ajouter expiration (TTL) et suppression planifiée des données sensibles.
+- [ ] Introduire chiffrement au repos des journaux contenant données utilisateur.
+- [ ] Export/import sécurisé du coffre pour migration locale.
+
+### Phase 9 — Fiabilisation produit (à faire)
+- [ ] Définir profils d’exécution : `dev`, `safe`, `autonomous`.
+- [ ] Mettre en place tests E2E (navigation, formulaires, secrets).
+- [ ] Ajouter métriques de performance (latence, RAM max, taux d’échec outil).
+- [ ] Documenter procédure de reprise après incident (crash, corruption coffre).
+
+### Priorités exécution (ordre recommandé)
+1. **Sécurité d’abord** : Phases 5 + 8 (autorisations, audit, cycle de vie des secrets).
+2. **Capacités web robustes** : Phases 6 + 7 (navigation/formulaires fiables).
+3. **Industrialisation** : Phase 9 (tests, métriques, modes d’exécution).
+
+### Critères d’acceptation (MVP v1 local)
+- [ ] Démarrage en < 15 s sur machine CPU standard avec limite **≤ 1 GB RAM**.
+- [ ] Exécution de 3 outils consécutifs sans crash (search → web → formulaire).
+- [ ] Aucun secret affiché en clair dans les logs.
+- [ ] Confirmation explicite avant toute action sensible (soumission de formulaire, lecture secret).
 
 ---
 
@@ -127,10 +162,28 @@ Exemples de commandes dans le CLI :
 
 ---
 
-## Prochaines évolutions recommandées
+## Backlog fonctionnel (documentation-first)
 
-1. Politique d’autorisations interactive (confirmations par action sensible).
-2. Planification de tâches (scheduler + retries).
-3. Observabilité (OpenTelemetry, traces, dashboards).
-4. Pack Docker CPU-only.
-5. Tests E2E sur site de démo de formulaires.
+### 1) Outils IA à ajouter (liste variée)
+- Connecteurs fichiers : PDF, CSV, JSON, Markdown.
+- Connecteur email (lecture brouillons locaux + génération de réponse).
+- Outils calendrier/tâches locaux (iCal, rappels).
+- Exécution scripts “safe” avec sandbox + quotas.
+- Résumeur de pages web longues et extraction d’actions concrètes.
+
+### 2) Gouvernance et conformité locale
+- Journal de consentement utilisateur pour actions critiques.
+- Masquage automatique des secrets dans traces/debug.
+- Politique de rétention configurable (7/30/90 jours).
+- Commande “panic” pour purge immédiate des données sensibles.
+
+### 3) Expérience développeur
+- Fichier de config unique (`config.yaml`) avec profils.
+- Commande `doctor` pour vérifier dépendances (Playwright, modèle, droits FS).
+- Templates de prompts système par cas d’usage (assistant perso, scraping, RPA).
+
+### 4) Roadmap technique courte (30 jours)
+- **Semaine 1** : audit sécurité, politique d’autorisations, logs structurés.
+- **Semaine 2** : navigation web robuste + extraction structurée.
+- **Semaine 3** : formulaires avancés + mode dry-run + captures preuve.
+- **Semaine 4** : tests E2E, optimisation RAM, publication v0.2.0.
