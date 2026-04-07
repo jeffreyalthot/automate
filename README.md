@@ -67,16 +67,75 @@ Ce projet fournit une base **prête à étendre** pour créer un automate IA loc
 - [ ] Ajouter métriques de performance (latence, RAM max, taux d’échec outil).
 - [ ] Documenter procédure de reprise après incident (crash, corruption coffre).
 
+### Phase 10 — Documentation d’architecture (à faire)
+- [ ] Écrire une spec d’architecture (`docs/architecture.md`) avec :
+  - [ ] flux “prompt → plan → outil → vérification” ;
+  - [ ] séparation des responsabilités (LLM, orchestrateur, toolkit, coffre secrets) ;
+  - [ ] surfaces d’attaque et contre-mesures.
+- [ ] Décrire un **threat model local** (machine compromise, phishing formulaire, fuite logs).
+- [ ] Ajouter un diagramme de séquence pour une action sensible (ex: soumission formulaire avec confirmation utilisateur).
+- [ ] Documenter les limites connues de confidentialité (navigation web + données envoyées aux sites tiers).
+
+### Phase 11 — Catalogage des outils IA (à faire)
+- [ ] Créer un registre unique `docs/tools-catalog.md` :
+  - [ ] nom outil ;
+  - [ ] permissions requises ;
+  - [ ] entrées/sorties ;
+  - [ ] niveau de risque (low/medium/high) ;
+  - [ ] besoin de confirmation utilisateur.
+- [ ] Ajouter des catégories minimales :
+  - [ ] Web (search, open, extract, screenshot) ;
+  - [ ] Formulaires (analyze, fill, submit, dry-run) ;
+  - [ ] Fichiers locaux (read/write/convert) ;
+  - [ ] Système (commandes “safe” en sandbox).
+- [ ] Définir un contrat d’outil standard JSON pour simplifier l’ajout de nouveaux connecteurs.
+
+### Phase 12 — Gestion des identifiants & données sensibles (à faire)
+- [ ] Mettre en place 2 niveaux de coffre :
+  - [ ] `secrets` (mots de passe, tokens API, cookies) ;
+  - [ ] `private_data` (notes perso, préférences utilisateur).
+- [ ] Forcer chiffrement + contrôle d’accès logique par scope (`user`, `session`, `tool`).
+- [ ] Ajouter une commande de rotation des secrets (ex: `secret:rotate:key_name`).
+- [ ] Ajouter politique “ne jamais auto-remplir un mot de passe sans consentement explicite”.
+- [ ] Ajouter journal d’accès sensible : qui, quoi, quand, pourquoi (sans exposer la valeur du secret).
+
 ### Priorités exécution (ordre recommandé)
 1. **Sécurité d’abord** : Phases 5 + 8 (autorisations, audit, cycle de vie des secrets).
 2. **Capacités web robustes** : Phases 6 + 7 (navigation/formulaires fiables).
 3. **Industrialisation** : Phase 9 (tests, métriques, modes d’exécution).
+4. **Documentation durable** : Phases 10 + 11 (architecture + catalogue outils).
+5. **Secrets de niveau production locale** : Phase 12 (coffre, rotation, journal d’accès).
 
 ### Critères d’acceptation (MVP v1 local)
 - [ ] Démarrage en < 15 s sur machine CPU standard avec limite **≤ 1 GB RAM**.
 - [ ] Exécution de 3 outils consécutifs sans crash (search → web → formulaire).
 - [ ] Aucun secret affiché en clair dans les logs.
 - [ ] Confirmation explicite avant toute action sensible (soumission de formulaire, lecture secret).
+
+### Critères d’acceptation (v1.5 “autonomie contrôlée”)
+- [ ] L’agent peut exécuter un mini-plan web en 5 étapes max avec rollback en cas d’échec.
+- [ ] Le mode dry-run affiche exactement les champs de formulaire modifiés avant validation.
+- [ ] Tous les appels d’outils sont tracés avec ID de corrélation (debug reproductible).
+- [ ] Rotation d’un secret critique testée et validée sans downtime.
+- [ ] Rapport final d’exécution généré en Markdown (actions, preuves, erreurs, recommandations).
+
+### Jalons livraison recommandés
+- **v0.2.0 (Documentation-first)** :
+  - Roadmap consolidée ;
+  - architecture décrite ;
+  - catalogue d’outils normalisé.
+- **v0.3.0 (Web + formulaires robustes)** :
+  - navigation guidée ;
+  - extraction structurée ;
+  - dry-run + validation humaine.
+- **v0.4.0 (Sécurité renforcée)** :
+  - gouvernance des secrets ;
+  - audit trail ;
+  - politiques d’autorisation strictes.
+- **v1.0.0 (Usage quotidien local)** :
+  - profils stables ;
+  - tests E2E complets ;
+  - documentation d’exploitation.
 
 ---
 
@@ -187,3 +246,27 @@ Exemples de commandes dans le CLI :
 - **Semaine 2** : navigation web robuste + extraction structurée.
 - **Semaine 3** : formulaires avancés + mode dry-run + captures preuve.
 - **Semaine 4** : tests E2E, optimisation RAM, publication v0.2.0.
+
+### 5) Roadmap étendue (90 jours, orientée production locale)
+- **Mois 1 — Foundations**
+  - Stabiliser le noyau LLM ≤ 1 GB RAM (bench CPU + RAM).
+  - Finaliser la spec architecture et le contrat des outils.
+  - Mettre en place la politique de sécurité par défaut.
+- **Mois 2 — Capacités autonomes encadrées**
+  - Déployer le planner multi-étapes (plan/replan/stop).
+  - Renforcer la navigation web et l’automatisation formulaire.
+  - Introduire validation humaine configurable sur actions critiques.
+- **Mois 3 — Fiabilité & exploitation**
+  - Couvrir les parcours critiques avec E2E.
+  - Ajouter monitoring local (latence, crash, RAM max).
+  - Préparer release v1.0.0 avec guide opérateur.
+
+### 6) Registre des risques (documentation initiale)
+- **Risque** : dépassement RAM > 1 GB sur prompts longs.  
+  **Mitigation** : limite stricte `n_ctx`, truncation intelligente, watchdog mémoire.
+- **Risque** : fuite de secrets dans logs/erreurs.  
+  **Mitigation** : redaction automatique, logs chiffrés, revue sécurité.
+- **Risque** : soumission involontaire de formulaire sensible.  
+  **Mitigation** : dry-run + confirmation explicite + allowlist domaines.
+- **Risque** : outil externe non fiable / indisponible.  
+  **Mitigation** : fallback provider + gestion d’erreur standardisée + retry borné.
