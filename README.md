@@ -137,6 +137,98 @@ Ce projet fournit une base **prête à étendre** pour créer un automate IA loc
   - tests E2E complets ;
   - documentation d’exploitation.
 
+### Backlog détaillé (prochaines itérations)
+
+#### Sprint A — Base documentaire exécutable (1 semaine)
+- [ ] Créer `docs/architecture.md` (vue composants + flux de données).
+- [ ] Créer `docs/security.md` (menaces, hypothèses, limites).
+- [ ] Créer `docs/runbooks/incident-response.md` (procédure en cas d’échec/compromission).
+- [ ] Créer `docs/tools-catalog.md` avec format commun de description d’outil.
+- [ ] Ajouter un glossaire `docs/glossary.md` (secret, consentement, dry-run, scope).
+
+**Definition of Done (Sprint A)**
+- [ ] Chaque document possède : objectif, périmètre, exemples.
+- [ ] Les risques “haut niveau” ont au moins une contre-mesure documentée.
+- [ ] Les commandes CLI mentionnées dans la doc sont testées localement.
+
+#### Sprint B — Navigation web contrôlée (1 à 2 semaines)
+- [ ] Introduire une machine d’états simple : `PLAN -> ACT -> VERIFY -> STOP`.
+- [ ] Implémenter une politique de navigation :
+  - [ ] allowlist/denylist de domaines ;
+  - [ ] limites de redirections ;
+  - [ ] blocage des téléchargements automatiques.
+- [ ] Ajouter un mode “preuve” :
+  - [ ] capture écran horodatée ;
+  - [ ] URL finale ;
+  - [ ] extrait texte nettoyé.
+- [ ] Ajouter une commande `web:plan:<objectif>` avec budget d’étapes.
+
+**Definition of Done (Sprint B)**
+- [ ] Un scénario “rechercher puis ouvrir une page” fonctionne en ≤ 5 étapes.
+- [ ] Les domaines non autorisés sont refusés avec un message explicite.
+- [ ] Chaque action navigateur produit un log corrélé.
+
+#### Sprint C — Formulaires sûrs + consentement (1 à 2 semaines)
+- [ ] Construire `form:analyze` pour lister automatiquement les champs détectés.
+- [ ] Construire `form:dryrun` pour prévisualiser les valeurs avant soumission.
+- [ ] Construire `form:submit` avec double confirmation utilisateur pour champs sensibles.
+- [ ] Gérer des stratégies anti-erreur :
+  - [ ] validation format email/téléphone ;
+  - [ ] détection de champs mot de passe ;
+  - [ ] annulation transactionnelle si un champ critique est ambigu.
+
+**Definition of Done (Sprint C)**
+- [ ] Aucun mot de passe n’est soumis sans confirmation explicite.
+- [ ] Le rapport dry-run reflète exactement les champs modifiés.
+- [ ] Un test E2E couvre “analyze -> dryrun -> submit”.
+
+#### Sprint D — Coffre local et gouvernance des secrets (1 semaine)
+- [ ] Scinder le stockage en deux espaces : `secrets/` et `private_data/`.
+- [ ] Ajouter métadonnées minimales : `owner`, `created_at`, `last_access_at`, `ttl`.
+- [ ] Implémenter purge planifiée des secrets expirés.
+- [ ] Ajouter une commande de rotation de clé de chiffrement.
+- [ ] Créer un journal d’accès masqué (jamais de valeur en clair).
+
+**Definition of Done (Sprint D)**
+- [ ] Rotation de clé testée sans perte de données.
+- [ ] Les entrées expirées sont supprimées automatiquement.
+- [ ] Les logs ne contiennent jamais la valeur d’un secret.
+
+#### Sprint E — Stabilisation produit (1 semaine)
+- [ ] Ajouter profils runtime (`dev`, `safe`, `autonomous`) dans un fichier de config.
+- [ ] Instrumenter des métriques de base (latence outil, erreurs, mémoire max).
+- [ ] Ajouter un rapport Markdown final de session (actions, erreurs, preuves).
+- [ ] Mettre en place une CI minimale (lint + tests unitaires + E2E critiques).
+
+**Definition of Done (Sprint E)**
+- [ ] Un run complet génère automatiquement un rapport exploitable.
+- [ ] Les tests critiques passent en CI.
+- [ ] Le profil `safe` bloque toute action sensible non confirmée.
+
+### Plan de documentation (ordre de rédaction recommandé)
+1. `docs/architecture.md` — contrat entre modules (LLM, orchestrateur, outils, coffre).
+2. `docs/tools-catalog.md` — spécification d’interface des outils et permissions.
+3. `docs/security.md` — menaces, politiques d’accès, consentement utilisateur.
+4. `docs/runbooks/*.md` — opérations courantes et réponses aux incidents.
+5. `docs/adr/` — décisions d’architecture (format ADR court).
+
+### Risques clés à traiter dès maintenant
+- **Dérive autonomie** : un agent qui enchaîne trop d’actions web sans validation.
+  - Mitigation : budget d’étapes + points de contrôle utilisateur.
+- **Fuite de secrets** : logs ou prompts contenant des données sensibles.
+  - Mitigation : masquage systématique + classification des données.
+- **Dépassement mémoire** (> 1 GB) : contexte trop long ou modèle trop lourd.
+  - Mitigation : limites strictes `n_ctx`, monitoring RAM, fallback vers réponse courte.
+- **Soumissions involontaires** : formulaires envoyés sur mauvais site/champ.
+  - Mitigation : dry-run obligatoire + confirmation explicite + allowlist domaines.
+
+### Indicateurs de succès (KPIs) pour valider la roadmap
+- [ ] **Fiabilité outil** : ≥ 95% d’actions outil réussies sur un jeu de scénarios.
+- [ ] **Contrainte RAM** : pic mémoire ≤ 1 GB sur profil `safe`.
+- [ ] **Sécurité** : 0 secret en clair dans logs/tests d’intégration.
+- [ ] **Explicabilité** : 100% des actions sensibles justifiées dans le rapport final.
+- [ ] **Ergonomie** : temps moyen de configuration initiale < 20 minutes.
+
 ---
 
 ## Choix du modèle (≤ 1 GB RAM)
