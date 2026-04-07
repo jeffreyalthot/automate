@@ -42,7 +42,7 @@ Nouveautés:
 - analyse de formulaires avec `form:analyze:<url>`;
 - prévisualisation des valeurs de formulaires avec `form:dryrun:<url>:...`;
 - rapport de session en Markdown via `report:markdown` / `report:write:<chemin>`.
-- visualisation de l'arborescence locale via `workspace:tree[:profondeur]` (1 à 6).
+- visualisation de l'arborescence locale via `workspace:tree[:profondeur]` (1 à 12).
 - résumé structurel du projet avec `workspace:summary[:profondeur]` (JSON: extensions, tailles, top fichiers).
 - catalogue arborescent avec `workspace:catalog[:profondeur]` (JSON: dossiers dominants, extensions, volumétrie).
 - diagnostic consolidé du projet via `workspace:insights[:profondeur]` (JSON: extension dominante, dossiers principaux, moyenne de taille).

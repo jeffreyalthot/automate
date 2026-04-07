@@ -16,7 +16,7 @@ class WorkspacePythonOverview:
     root: Path
 
     def build(self, depth: int = 3, max_files: int = 400) -> ToolResult:
-        safe_depth = max(1, min(depth, 8))
+        safe_depth = max(1, min(depth, 12))
         safe_max_files = max(20, min(max_files, 2000))
 
         files_scanned = 0

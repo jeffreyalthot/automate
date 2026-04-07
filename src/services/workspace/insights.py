@@ -13,7 +13,7 @@ class WorkspaceInsights:
     root: Path
 
     def build(self, depth: int = 3, max_entries: int = 1500) -> ToolResult:
-        safe_depth = max(1, min(depth, 8))
+        safe_depth = max(1, min(depth, 12))
         safe_max_entries = max(100, min(max_entries, 4000))
 
         entries_seen = 0

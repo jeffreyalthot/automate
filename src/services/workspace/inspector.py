@@ -13,7 +13,7 @@ class WorkspaceInspector:
 
     def tree(self, depth: int = 3) -> ToolResult:
         try:
-            safe_depth = max(1, min(depth, 6))
+            safe_depth = max(1, min(depth, 12))
             output = format_tree(self.root, depth=safe_depth)
             return ToolResult(ok=True, output=output)
         except Exception as exc:
