@@ -16,6 +16,7 @@ HELP_TEXT = """Commandes disponibles:
 - search:<requête>
 - workspace:tree[:profondeur]
 - workspace:summary[:profondeur]
+- workspace:catalog[:profondeur]
 - form:fill:<url>:<selecteur>=<valeur>,<selecteur>=<valeur>
 - form:analyze:<url>
 - form:dryrun:<url>:<selecteur>=<valeur>,<selecteur>=<valeur>
@@ -89,6 +90,18 @@ class CommandExecutor:
                 self._track(parsed, response, success=False)
                 return response
             result = self.toolkit.workspace_summary_report(depth=depth)
+            self._track(parsed, result.output, success=result.ok)
+            return result.output
+
+        if parsed.name == "workspace_catalog":
+            raw_depth = parsed.args[0]
+            try:
+                depth = int(raw_depth)
+            except ValueError:
+                response = "Profondeur invalide. Utilisez un entier entre 1 et 8."
+                self._track(parsed, response, success=False)
+                return response
+            result = self.toolkit.workspace_catalog_report(depth=depth)
             self._track(parsed, result.output, success=result.ok)
             return result.output
 

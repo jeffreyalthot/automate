@@ -32,6 +32,12 @@ def parse_command(raw_command: str) -> ParsedCommand:
     if command.startswith("workspace:tree:"):
         return ParsedCommand(name="workspace_tree", args=(command.removeprefix("workspace:tree:"),))
 
+    if command == "workspace:catalog":
+        return ParsedCommand(name="workspace_catalog", args=("3",))
+
+    if command.startswith("workspace:catalog:"):
+        return ParsedCommand(name="workspace_catalog", args=(command.removeprefix("workspace:catalog:"),))
+
     if command == "workspace:summary":
         return ParsedCommand(name="workspace_summary", args=("3",))
 
