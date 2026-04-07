@@ -26,6 +26,12 @@ def parse_command(raw_command: str) -> ParsedCommand:
     if command.startswith("search:"):
         return ParsedCommand(name="search", args=(command.removeprefix("search:"),))
 
+    if command == "workspace:tree":
+        return ParsedCommand(name="workspace_tree", args=("3",))
+
+    if command.startswith("workspace:tree:"):
+        return ParsedCommand(name="workspace_tree", args=(command.removeprefix("workspace:tree:"),))
+
     if command.startswith("form:fill:"):
         payload = command.removeprefix("form:fill:")
         url, separator, fields = payload.rpartition(":")

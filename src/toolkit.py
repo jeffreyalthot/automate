@@ -1,24 +1,20 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
 
 import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
+from src.models import ToolResult
 from src.security import PathGuard
-
-
-@dataclass
-class ToolResult:
-    ok: bool
-    output: str
+from src.services.workspace import WorkspaceInspector
 
 
 class Toolkit:
     def __init__(self, path_guard: PathGuard) -> None:
         self.path_guard = path_guard
+        self.workspace_inspector = WorkspaceInspector(self.path_guard.base_dir)
 
     def fetch_webpage_text(self, url: str, timeout: int = 20) -> ToolResult:
         try:
@@ -87,6 +83,9 @@ class Toolkit:
             return ToolResult(True, json.dumps(descriptors[:30], ensure_ascii=False, indent=2))
         except Exception as exc:
             return ToolResult(False, f"Erreur analyse formulaire: {exc}")
+
+    def workspace_tree(self, depth: int = 3) -> ToolResult:
+        return self.workspace_inspector.tree(depth=depth)
 
     def write_file(self, path: str, content: str) -> ToolResult:
         try:

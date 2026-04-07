@@ -23,7 +23,11 @@ src/
 ├── security/
 │   └── path_guard.py
 ├── services/
-│   └── command_executor.py
+│   ├── command_executor.py
+│   └── workspace/
+│       └── inspector.py
+├── utils/
+│   └── tree_formatter.py
 ├── toolkit.py
 └── ...
 ```
@@ -35,6 +39,7 @@ Nouveautés:
 - analyse de formulaires avec `form:analyze:<url>`;
 - prévisualisation des valeurs de formulaires avec `form:dryrun:<url>:...`;
 - rapport de session en Markdown via `report:markdown` / `report:write:<chemin>`.
+- visualisation de l'arborescence locale via `workspace:tree[:profondeur]` (1 à 6).
 
 ## Roadmap (détaillée)
 
