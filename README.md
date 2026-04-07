@@ -496,3 +496,17 @@ Exemples de commandes dans le CLI :
 - [ ] Logs sans secret en clair (contrôle automatique).
 - [ ] Tests critiques validés en CI.
 - [ ] Preuve de fonctionnement reproductible (commande + artefacts).
+
+
+## Commandes CLI disponibles
+
+- `help` : affiche l'aide des commandes.
+- `web:<url>` : récupère le texte d'une page web.
+- `search:<requête>` : effectue une recherche web simple.
+- `secret:set:<clé>:<valeur>` : enregistre un secret chiffré localement.
+- `secret:get:<clé>` : lit un secret par sa clé.
+- `secret:list` : liste les clés existantes.
+- `file:read:<chemin>` : lit un fichier local.
+- `file:write:<chemin>:<contenu>` : écrit un fichier local.
+
+Le parsing des commandes est maintenant isolé dans `src/commands/parser.py`, ce qui facilite l'ajout de nouvelles commandes.

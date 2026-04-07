@@ -5,7 +5,7 @@ from src.agent import Agent
 
 def main() -> None:
     agent = Agent.create()
-    print("Automate IA local prêt. Tape 'exit' pour quitter.")
+    print("Automate IA local prêt. Tape 'help' pour les commandes, 'exit' pour quitter.")
 
     while True:
         user_input = input("> ").strip()
