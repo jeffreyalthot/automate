@@ -53,6 +53,12 @@ def parse_command(raw_command: str) -> ParsedCommand:
     if command.startswith("workspace:map:"):
         return ParsedCommand(name="workspace_map", args=(command.removeprefix("workspace:map:"),))
 
+    if command == "workspace:python":
+        return ParsedCommand(name="workspace_python", args=("3",))
+
+    if command.startswith("workspace:python:"):
+        return ParsedCommand(name="workspace_python", args=(command.removeprefix("workspace:python:"),))
+
     if command.startswith("workspace:summary:"):
         return ParsedCommand(name="workspace_summary", args=(command.removeprefix("workspace:summary:"),))
 

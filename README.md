@@ -46,6 +46,7 @@ Nouveautés:
 - résumé structurel du projet avec `workspace:summary[:profondeur]` (JSON: extensions, tailles, top fichiers).
 - catalogue arborescent avec `workspace:catalog[:profondeur]` (JSON: dossiers dominants, extensions, volumétrie).
 - diagnostic consolidé du projet via `workspace:insights[:profondeur]` (JSON: extension dominante, dossiers principaux, moyenne de taille).
+- analyse du code Python via `workspace:python[:profondeur]` (JSON: fonctions/classes/imports, hotspots par fichier).
 
 ## Roadmap (détaillée)
 

@@ -51,5 +51,17 @@ class ParserWorkspaceInsightsTests(unittest.TestCase):
         self.assertEqual(parsed.args, ("7",))
 
 
+class ParserWorkspacePythonTests(unittest.TestCase):
+    def test_workspace_python_default(self) -> None:
+        parsed = parse_command("workspace:python")
+        self.assertEqual(parsed.name, "workspace_python")
+        self.assertEqual(parsed.args, ("3",))
+
+    def test_workspace_python_custom_depth(self) -> None:
+        parsed = parse_command("workspace:python:6")
+        self.assertEqual(parsed.name, "workspace_python")
+        self.assertEqual(parsed.args, ("6",))
+
+
 if __name__ == "__main__":
     unittest.main()
