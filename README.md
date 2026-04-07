@@ -247,6 +247,8 @@ Exemple de repo HF compatible :
 
 ## Arborescence
 
+### Arborescence actuelle (MVP)
+
 ```txt
 .
 ├─ README.md
@@ -258,6 +260,99 @@ Exemple de repo HF compatible :
    ├─ secure_store.py
    └─ toolkit.py
 ```
+
+### Arborescence cible (niveau production locale)
+
+```txt
+.
+├─ README.md
+├─ requirements.txt
+├─ pyproject.toml
+├─ .env.example
+├─ config/
+│  ├─ config.dev.yaml
+│  ├─ config.safe.yaml
+│  └─ config.autonomous.yaml
+├─ models/
+│  ├─ README.md
+│  └─ manifests/
+│     ├─ qwen2.5-0.5b-q4km.yaml
+│     └─ tinyllama-1.1b-q2k.yaml
+├─ data/
+│  ├─ secrets/
+│  ├─ private_data/
+│  ├─ sessions/
+│  ├─ logs/
+│  └─ artifacts/
+├─ docs/
+│  ├─ architecture.md
+│  ├─ security.md
+│  ├─ tools-catalog.md
+│  ├─ operations.md
+│  ├─ runbooks/
+│  │  ├─ incident-response.md
+│  │  ├─ secret-rotation.md
+│  │  └─ browser-failure.md
+│  └─ adr/
+│     ├─ 0001-tool-contract.md
+│     └─ 0002-secret-scope-policy.md
+├─ scripts/
+│  ├─ download_model.py
+│  ├─ benchmark_ram.py
+│  ├─ doctor.py
+│  └─ migrate_store.py
+├─ src/
+│  ├─ app/
+│  │  ├─ cli.py
+│  │  ├─ api.py
+│  │  └─ lifecycle.py
+│  ├─ core/
+│  │  ├─ agent_loop.py
+│  │  ├─ planner.py
+│  │  ├─ policy_engine.py
+│  │  └─ report_builder.py
+│  ├─ llm/
+│  │  ├─ loader.py
+│  │  ├─ runtime.py
+│  │  └─ prompts/
+│  ├─ memory/
+│  │  ├─ vault.py
+│  │  ├─ private_store.py
+│  │  ├─ retention.py
+│  │  └─ redaction.py
+│  ├─ tools/
+│  │  ├─ registry.py
+│  │  ├─ contracts.py
+│  │  ├─ web/
+│  │  │  ├─ navigator.py
+│  │  │  ├─ extractor.py
+│  │  │  └─ search.py
+│  │  ├─ forms/
+│  │  │  ├─ analyzer.py
+│  │  │  ├─ dry_run.py
+│  │  │  └─ submit.py
+│  │  ├─ files/
+│  │  └─ system/
+│  ├─ observability/
+│  │  ├─ logging.py
+│  │  ├─ metrics.py
+│  │  └─ tracing.py
+│  └─ security/
+│     ├─ consent.py
+│     ├─ secrets_policy.py
+│     └─ domain_policy.py
+├─ tests/
+│  ├─ unit/
+│  ├─ integration/
+│  ├─ e2e/
+│  └─ fixtures/
+└─ .github/
+   └─ workflows/
+      ├─ ci.yml
+      └─ security-scan.yml
+```
+
+> Cette arborescence permet d’évoluer vers un vrai mode production local: séparation claire des responsabilités, runbooks opérationnels, gouvernance des secrets et tests E2E.
 
 ---
 
@@ -362,3 +457,42 @@ Exemples de commandes dans le CLI :
   **Mitigation** : dry-run + confirmation explicite + allowlist domaines.
 - **Risque** : outil externe non fiable / indisponible.  
   **Mitigation** : fallback provider + gestion d’erreur standardisée + retry borné.
+
+
+## Extension roadmap — niveau production continue (documentation-first)
+
+### Trimestre 1 (T1) — socle exploitable
+- [ ] Formaliser les contrats API internes (`src/tools/contracts.py`, `src/core/policy_engine.py`).
+- [ ] Ajouter une politique de permissions explicites par outil (`allow`, `confirm`, `deny`).
+- [ ] Définir des profils de ressources (`eco`, `balanced`, `safe`) avec garde-fous RAM ≤ 1 GB.
+- [ ] Documenter l’onboarding développeur (setup, conventions, cycle de release).
+
+### Trimestre 2 (T2) — autonomie contrôlée web + formulaires
+- [ ] Ajouter un planificateur “objectif → étapes” avec arrêt automatique sur risque élevé.
+- [ ] Créer un module de détection de champs sensibles (mot de passe, IBAN, CB, OTP).
+- [ ] Mettre en place une preuve d’action systématique (screenshot, URL, hash du rapport).
+- [ ] Introduire un mode “approval gate” bloquant toute soumission sans consentement actif.
+
+### Trimestre 3 (T3) — fiabilité production locale
+- [ ] Ajouter tests de charge locale CPU/RAM (scénarios 15 min, 30 min, 60 min).
+- [ ] Implémenter reprise après crash (journal transactionnel + relecture des tâches).
+- [ ] Ajouter rotation automatique des secrets et audit mensuel local.
+- [ ] Générer un rapport conformité local (sécurité, confidentialité, disponibilité).
+
+### Trimestre 4 (T4) — packaging et exploitation quotidienne
+- [ ] Packaging exécutable (CLI installable + service local démarrable).
+- [ ] Versionnement sémantique + notes de release + migration de schéma.
+- [ ] Mode “maintenance” pour sauvegarde/restauration du coffre chiffré.
+- [ ] Guide opérateur final (checklists quotidiennes + procédures d’urgence).
+
+### Definition of Ready (DoR) pour chaque fonctionnalité
+- [ ] Risque sécurité évalué (`low/medium/high`).
+- [ ] Budget mémoire estimé et validé (< 1 GB).
+- [ ] Stratégie de rollback documentée.
+- [ ] Cas de test unitaires + intégration définis.
+
+### Definition of Done (DoD) production
+- [ ] Documentation utilisateur et opérateur mise à jour.
+- [ ] Logs sans secret en clair (contrôle automatique).
+- [ ] Tests critiques validés en CI.
+- [ ] Preuve de fonctionnement reproductible (commande + artefacts).
