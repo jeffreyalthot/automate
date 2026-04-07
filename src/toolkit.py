@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright
 
 from src.models import ToolResult
 from src.security import PathGuard
-from src.services.workspace import WorkspaceInspector, WorkspaceSummary
+from src.services.workspace import WorkspaceCatalog, WorkspaceInspector, WorkspaceSummary
 
 
 class Toolkit:
@@ -16,6 +16,7 @@ class Toolkit:
         self.path_guard = path_guard
         self.workspace_inspector = WorkspaceInspector(self.path_guard.base_dir)
         self.workspace_summary = WorkspaceSummary(self.path_guard.base_dir)
+        self.workspace_catalog = WorkspaceCatalog(self.path_guard.base_dir)
 
     def fetch_webpage_text(self, url: str, timeout: int = 20) -> ToolResult:
         try:
@@ -90,6 +91,9 @@ class Toolkit:
 
     def workspace_summary_report(self, depth: int = 3) -> ToolResult:
         return self.workspace_summary.build(depth=depth)
+
+    def workspace_catalog_report(self, depth: int = 3) -> ToolResult:
+        return self.workspace_catalog.build(depth=depth)
 
     def write_file(self, path: str, content: str) -> ToolResult:
         try:

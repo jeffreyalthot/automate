@@ -25,6 +25,7 @@ src/
 ├── services/
 │   ├── command_executor.py
 │   └── workspace/
+│       ├── catalog.py
 │       ├── inspector.py
 │       └── summary.py
 ├── utils/
@@ -42,6 +43,7 @@ Nouveautés:
 - rapport de session en Markdown via `report:markdown` / `report:write:<chemin>`.
 - visualisation de l'arborescence locale via `workspace:tree[:profondeur]` (1 à 6).
 - résumé structurel du projet avec `workspace:summary[:profondeur]` (JSON: extensions, tailles, top fichiers).
+- catalogue arborescent avec `workspace:catalog[:profondeur]` (JSON: dossiers dominants, extensions, volumétrie).
 
 ## Roadmap (détaillée)
 
