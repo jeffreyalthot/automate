@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+
+from src.security import PathGuard
 
 
 @dataclass
@@ -16,6 +17,9 @@ class ToolResult:
 
 
 class Toolkit:
+    def __init__(self, path_guard: PathGuard) -> None:
+        self.path_guard = path_guard
+
     def fetch_webpage_text(self, url: str, timeout: int = 20) -> ToolResult:
         try:
             r = requests.get(url, timeout=timeout)
@@ -61,16 +65,17 @@ class Toolkit:
 
     def write_file(self, path: str, content: str) -> ToolResult:
         try:
-            target = Path(path)
+            target = self.path_guard.resolve(path)
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(content, encoding="utf-8")
-            return ToolResult(True, f"Fichier écrit: {path}")
+            return ToolResult(True, f"Fichier écrit: {target}")
         except Exception as exc:
             return ToolResult(False, f"Erreur écriture: {exc}")
 
     def read_file(self, path: str) -> ToolResult:
         try:
-            content = Path(path).read_text(encoding="utf-8")
+            target = self.path_guard.resolve(path)
+            content = target.read_text(encoding="utf-8")
             return ToolResult(True, content)
         except Exception as exc:
             return ToolResult(False, f"Erreur lecture: {exc}")

@@ -26,6 +26,16 @@ def parse_command(raw_command: str) -> ParsedCommand:
     if command.startswith("search:"):
         return ParsedCommand(name="search", args=(command.removeprefix("search:"),))
 
+    if command.startswith("form:fill:"):
+        parts = command.split(":", 3)
+        if len(parts) != 4:
+            return ParsedCommand(
+                name="invalid",
+                args=("Format attendu: form:fill:<url>:<selecteur>=<valeur>,...",),
+            )
+        _, _, url, fields = parts
+        return ParsedCommand(name="form_fill", args=(url, fields))
+
     if command.startswith("secret:get:"):
         return ParsedCommand(name="secret_get", args=(command.removeprefix("secret:get:"),))
 

@@ -10,6 +10,26 @@ Ce projet fournit une base **prête à étendre** pour créer un automate IA loc
 
 ---
 
+## Arborescence actuelle (extrait)
+
+```
+src/
+├── agent.py
+├── commands/
+│   └── parser.py
+├── security/
+│   └── path_guard.py
+├── services/
+│   └── command_executor.py
+├── toolkit.py
+└── ...
+```
+
+Nouveautés:
+- exécution des commandes centralisée dans `services/command_executor.py`;
+- garde-fou de chemin pour les opérations fichiers (`security/path_guard.py`);
+- nouvelle commande `form:fill:<url>:<selecteur>=<valeur>,...`.
+
 ## Roadmap (détaillée)
 
 ### Phase 0 — Documentation & cadrage (ce README)
